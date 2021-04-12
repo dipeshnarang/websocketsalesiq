@@ -142,7 +142,7 @@ function fetchData(){
     })
 }
 
-schedule.scheduleJob('*/15 * * * * *',function(){
+schedule.scheduleJob('*/5 * * * * *',function(){
     fetchData()
 })
 

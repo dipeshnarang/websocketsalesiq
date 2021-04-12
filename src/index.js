@@ -122,7 +122,7 @@ io.on('connection',(socket)=>{
     console.log("NEW")
      socket.emit('message',updatedData())
 
-    schedule.scheduleJob('*/5 * * * * *',function(){
+    schedule.scheduleJob('*/4 * * * * *',function(){
         socket.emit('message',updatedData())
     })
 })

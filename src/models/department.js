@@ -110,7 +110,7 @@ function fetchDepartmentsData(){
     })
 }
 
-schedule.scheduleJob('*/20 * * * * *',function(){
+schedule.scheduleJob('*/7 * * * * *',function(){
     fetchDepartmentsData()
 })
 
