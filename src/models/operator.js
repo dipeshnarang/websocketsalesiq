@@ -2,6 +2,8 @@ const db=require('./../databaseConnection/mariadb')
 const schedule=require('node-schedule')
 const {merge,calculateActiveTime,convertToReadableTime,IST}=require('../helperFunction/helperFunction')
 
+
+//Operator Class layout
 class Operator{
     constructor(id, operatorId ,name, departmentId, departmentName, email, status, lastLogin, lastOffline){
         this.id=id,
@@ -23,6 +25,7 @@ class Operator{
 
 let operators=[]
 
+// fetch operator data from database 
 function getOperatorDetails(callback){
     db.connectionPool.getConnection().then((conn)=>{
         let sql="SELECT operator.ID, operator.OPT_ID,operator.OPT_NAME, operator.OPT_DEPT_ID ,department.DEPT_NAME, operator.OPT_EMAIL, operator.STATUS, operator.LAST_LOGIN, operator.LAST_OFFLINE from operator inner join department on operator.OPT_DEPT_ID=department.ID;"
@@ -41,6 +44,7 @@ function getOperatorDetails(callback){
     })
 }
 
+//fetch chat details for each operator from database
 function getChatOperatorDetails(callback){
     let time=IST()
     let sql="Select chat_opt_details.OPTID, chat_opt_details.ATTENDED_TIME, chat_opt_details.END_TIME, chat_opt_details.CHATS_OWNED from chat_opt_details where ATTENDED_TIME>"+time +";"
@@ -59,7 +63,7 @@ function getChatOperatorDetails(callback){
 }
 
 
-
+//merge operator data and chat_opt_details and store it in array
 function fetchData(){
     getOperatorDetails(function(err,result){
         if(err){
@@ -136,18 +140,28 @@ function fetchData(){
                 let timeframes=merge(op.chatsAttended)
                 op.totalActiveTime=convertToReadableTime(calculateActiveTime(timeframes))      
             })
+
+            operators.sort((a,b)=>{
+                if(a.ongoingChats<b.ongoingChats){
+                    return 1
+                }else{
+                    return -1
+                }
+            })
         
             // console.log(operators)
         })
     })
 }
 
+//CRON to call the fetch function every few seconds
 schedule.scheduleJob('*/5 * * * * *',function(){
     fetchData()
 })
 
 fetchData()
 
+//Return array of opertaors
 function getAllOperators(){
     return operators
 }

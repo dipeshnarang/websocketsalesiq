@@ -2,6 +2,7 @@ const db=require('./../databaseConnection/mariadb')
 const schedule=require('node-schedule')
 const { merge, convertToReadableTime, calculateActiveTime,IST } = require('../helperFunction/helperFunction')
 
+//Department Class 
 class Department{
     constructor(id,uniqueName,name,deptId){
         this.id=id,
@@ -19,6 +20,7 @@ class Department{
 
 let departments=[]
 
+//Function for connection to database and fetching department data
 function fetchDepartments(callback){
     let date=new Date()
     date.setHours(date.getHours()-24)
@@ -39,6 +41,7 @@ function fetchDepartments(callback){
     })
 }
 
+//Connect to database and fetch chat data according to departments
 function fetchChatData(callback){
     let time=IST()
     let sql="select START_TIME, END_TIME, DEPT_ID from chat where START_TIME>"+time+";"
@@ -57,6 +60,7 @@ function fetchChatData(callback){
 }
 
 
+// Merge the fetched data for calculations and then stored in an array
 function fetchDepartmentsData(){
     fetchDepartments(function(err,departmentData){
         if(err){
@@ -111,12 +115,14 @@ function fetchDepartmentsData(){
     })
 }
 
+// CRON job to fetch department data
 schedule.scheduleJob('*/7 * * * * *',function(){
     fetchDepartmentsData()
 })
 
 fetchDepartmentsData()
 
+// get department Data
 function getDepartments(){
     return departments
 }

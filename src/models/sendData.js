@@ -2,6 +2,8 @@ const {getAllOperators}=require('./operator')
 const {getDepartments}=require('./department')
 require('./graph')
 
+
+// Merging operator and department Data
 function updatedData(){
     let operators=getAllOperators()
     let deparments=getDepartments()
@@ -23,6 +25,7 @@ function updatedData(){
 
 }
 
+// Sending merged data
 function sendDeptData(deptName){
     let deptData=deparments.find((dep)=>{
         return dep.name==deptName

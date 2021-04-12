@@ -44,7 +44,7 @@ app.post('/reset',function(request,response){
 	}
 });
 
-
+//LOGIN ROUTE
 app.post('/login', function(request, response) {
   
 	var username = request.body.email;
@@ -69,19 +69,7 @@ app.post('/login', function(request, response) {
                 conn.release()
             })
         }).catch
-	// 	connection.query('SELECT * FROM login WHERE email = ? AND password = ?', [username, password], function(error, results, fields) {
-    //    console.log("hello");
-    //    console.log(results);
-	// 		if (results.length > 0) {
-	// 			request.session.loggedin = true;
-	// 			request.session.username = username;
-	// 			response.redirect('/home');
-
-	// 		} else {
-	// 			response.send('Incorrect Username and/or Password!');
-	// 		}			
-	// 		response.end();
-	// 	});
+	
 	} else {
 		response.send('Please enter Username and Password!');
 		response.end();
